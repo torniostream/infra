@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  traefik:
+    image: "traefik:v2.3"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=manuel.romei@raytecvision.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/home/deploy/letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  backend:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`$HOSTNAME`) && PathPrefix(`/wss`)"
+      - "traefik.http.middlewares.test-stripprefix.stripprefix.prefixes=/wss"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.services.backend.loadbalancer.server.port=8082"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+      - "traefik.http.routers.backend.tls=true"
+  angular:
+     labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.angular.rule=Host(`$HOSTNAME`)"
+      - "traefik.http.routers.angular.entrypoints=websecure"
+      - "traefik.http.services.angular.loadbalancer.server.port=4200"
+      - "traefik.http.routers.angular.tls.certresolver=myresolver"
+      - "traefik.http.routers.angular.tls=true"
+
