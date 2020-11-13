@@ -4,8 +4,8 @@ services:
   backend:
     image: kriive/kurento-backend:latest
     environment:
-      - KMS_ADDR=$KMS_HOST
-      - KMS_PORT=$KMS_PORT
+      - KMS_ADDR
+      - KMS_PORT
     ports:
       - "8082"
   frontend:

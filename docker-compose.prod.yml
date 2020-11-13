@@ -25,12 +25,14 @@ services:
   backend:
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`$HOSTNAME`) && PathPrefix(`/wss`)"
-      - "traefik.http.middlewares.test-stripprefix.stripprefix.prefixes=/wss"
+      - "traefik.http.routers.backend.rule=(Host(`$HOSTNAME`) && PathPrefix(`/wss`)) || Host(`manager.shii.it`)"
+      - "traefik.http.middlewares.strip-backend.stripprefix.prefixes=/wss"
+      - "traefik.http.middlewares.strip-backend.stripprefix.forceslash=true"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.services.backend.loadbalancer.server.port=8082"
       - "traefik.http.routers.backend.tls.certresolver=myresolver"
       - "traefik.http.routers.backend.tls=true"
+      - "traefik.http.routers.backend.middlewares=strip-backend@docker"
   frontend:
     labels:
       - "traefik.enable=true"
@@ -39,4 +41,3 @@ services:
       - "traefik.http.services.frontend.loadbalancer.server.port=4200"
       - "traefik.http.routers.frontend.tls.certresolver=myresolver"
       - "traefik.http.routers.frontend.tls=true"
-
