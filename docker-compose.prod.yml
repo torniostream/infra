@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 services:
   traefik:
     image: "traefik:v2.3"
@@ -31,12 +31,12 @@ services:
       - "traefik.http.services.backend.loadbalancer.server.port=8082"
       - "traefik.http.routers.backend.tls.certresolver=myresolver"
       - "traefik.http.routers.backend.tls=true"
-  angular:
-     labels:
+  frontend:
+    labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.angular.rule=Host(`$HOSTNAME`)"
-      - "traefik.http.routers.angular.entrypoints=websecure"
-      - "traefik.http.services.angular.loadbalancer.server.port=4200"
-      - "traefik.http.routers.angular.tls.certresolver=myresolver"
-      - "traefik.http.routers.angular.tls=true"
+      - "traefik.http.routers.frontend.rule=Host(`$HOSTNAME`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.services.frontend.loadbalancer.server.port=4200"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      - "traefik.http.routers.frontend.tls=true"
 

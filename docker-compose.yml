@@ -1,5 +1,5 @@
 # Docker compose to develop
-version: "3.8"
+version: "3"
 services:
   backend:
     image: kriive/kurento-backend:latest
@@ -10,6 +10,9 @@ services:
       - "8082"
   frontend:
     image: kriive/kurento-frontend:latest
+    environment:
+      - NGINX_PORT=4200
+      - NGINX_HOST=$HOSTNAME
     ports:
       - "4200"
     links:
