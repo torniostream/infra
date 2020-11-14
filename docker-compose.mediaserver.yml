@@ -6,4 +6,4 @@ services:
     network_mode: "host"
     volumes:
       - ./etc-kurento:/etc/kurento:Z
-
+      - ./movies:/movies
