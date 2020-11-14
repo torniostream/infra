@@ -1,0 +1,9 @@
+# Docker compose to develop
+version: "3"
+services:
+  mediaserver:
+    image: kurento/kurento-media-server:latest
+    network_mode: "host"
+    volumes:
+      - ./etc-kurento:/etc/kurento:Z
+
