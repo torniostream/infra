@@ -1,0 +1,4 @@
+---
+create_user: kriive
+copy_local_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
+sys_packages: [ 'curl', 'neovim', 'git', 'ufw']
