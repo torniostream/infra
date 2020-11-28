@@ -47,4 +47,4 @@ services:
     image: v2tec/watchtower
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30 --label-enable
+    command: --interval 2200 --label-enable
